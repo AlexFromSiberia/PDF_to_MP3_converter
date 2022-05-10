@@ -5,10 +5,10 @@ from pathlib import Path
 from tkinter import *
 from tkinter import ttk, filedialog
 
-
 #GLOBALs
 language_of_the_file = 1
 path_to_pdf = ''
+
 
 def txt_to_mp3(text):
     """converts text we have got from the pdf to
@@ -21,12 +21,14 @@ def txt_to_mp3(text):
     my_audio = gTTS(text=text, lang=language, slow=False)
     file_name = Path(path_to_pdf).stem
     my_audio.save(f'{file_name}.mp3')
-    print (f'[+] {file_name}.mp3 saved')
+    print(f'[+] {file_name}.mp3 saved')
+    window.label = Label(width=75, height=3, bg='white', text=f'[+] {file_name}.mp3 saved').grid(column=0, row=6)
 
 
 def pdf_to_txt():
     """convert pdf file to text"""
     global path_to_pdf
+    window.label = Label(width=75, height=3, bg='white', text=f'In process...\nPlease wait....\nIt can take some time ....').grid(column=0, row=6)
     with pdfplumber.PDF(open(file=path_to_pdf, mode='rb')) as pdf:
         pages = [page.extract_text() for page in pdf.pages]
     text = ''.join(pages)
@@ -37,17 +39,20 @@ def pdf_to_txt():
 def select_file():
     global path_to_pdf
     path_to_pdf = filedialog.askopenfilename()
+    window.label = Label(width=75, height=3, bg='white', text=f'[+] File\n {path_to_pdf}\n has been selected').grid(column=0, row=6)
     return path_to_pdf
 
 
 def russian():
     global language_of_the_file
     language_of_the_file = 1
+    window.label = Label(width=75, height=3, bg='white', text=f'Russian language has been selected').grid(column=0, row=6)
 
 
 def english():
     global language_of_the_file
     language_of_the_file = 2
+    window.label = Label(width=75, height=3, bg='white', text=f'English language has been selected').grid(column=0, row=6)
 
 
 def window():
@@ -60,7 +65,7 @@ def window():
            " |_|    |____/ |_|       \__|  \___/   |_|  |_||_|    |____/  \n" \
            ""
     root = Tk()
-    root.geometry('570x320')
+    root.geometry('570x420')
     root.title("PDF  to  MP3")
     root.resizable(height=True, width=True)
     frm = ttk.Frame(root, padding=5)
@@ -68,7 +73,7 @@ def window():
     # Lables
     ttk.Label(frm, text=logo, font='Consolas', padding=5).grid(column=0, row=1)
     ttk.Label(frm, text="What is PDF file language?", padding=5).grid(column=0, row=2)
-
+    label = Label(width=75, height=3, bg='white', text="Here you'll see all the information\n about the convertation process" ).grid(column=0, row=6)
     # The Radiobutton (select language of the PDF file)
     language = IntVar()
     language.set(1)
